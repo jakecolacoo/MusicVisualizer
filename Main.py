@@ -16,6 +16,7 @@ def main():
     screen_height = 720
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Music Visualizer")
+    fullscreen = False
 
     # Initialize components
     audio_loader = AudioLoader()
@@ -56,6 +57,22 @@ def main():
                         print(f"Failed to load audio file: {event.file}")
                 except Exception as e:
                     print(f"Error loading audio file: {e}")
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_f or event.key == pygame.K_F11:
+                    fullscreen = not fullscreen
+                    if fullscreen:
+                        screen = pygame.display.set_mode(
+                            (0, 0), pygame.FULLSCREEN)
+                        screen_width, screen_height = screen.get_size()
+                    else:
+                        screen = pygame.display.set_mode((1280, 720))
+                        screen_width, screen_height = 1280, 720
+                    # Update visualizer dimensions if it exists
+                    if visualizer is not None:
+                        visualizer.screen_width = screen_width
+                        visualizer.screen_height = screen_height
+                        visualizer.center_x = screen_width // 2
+                        visualizer.center_y = screen_height // 2
 
         # Clear the screen
         screen.fill((0, 0, 0))
